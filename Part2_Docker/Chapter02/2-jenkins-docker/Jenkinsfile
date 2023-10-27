@@ -5,7 +5,7 @@ def ecrUrl="shjtestacr01.azurecr.io"
 def repository="test"
 def deployHost="10.2.0.4"
 def azureAcrLoginCommand="az acr login -n <registry name> -u <service principal의 app id >  -p <service princial의 client pw>"
-
+def test"docker login shjtestacr01.azurecr.io -u shjtestacr01 --password-stdin < /home/shj/password.txt"
 
 pipeline {
     agent any
@@ -27,7 +27,6 @@ pipeline {
         stage('Build Docker Image by Jib & Push to AWS ECR Repository') {
             steps {
                     sh """
-                        docker login shjtestacr01.azurecr.io -u shjtestacr01 --password-stdin < /home/shj/password.txt
                         cd ${mainDir}
                         ./gradlew jib -Djib.to.image=${ecrUrl}/${repository}:${currentBuild.number} -Djib.console='plain'
                     """
