@@ -36,10 +36,8 @@ pipeline {
         }
         stage('Deploy to Azure VM'){
             steps{
-                sshagent(credentials : ["deploy-key"]) {
                     sh "ssh -i /home/shj/server-key.pem shj@10.2.0.4 \
                       docker run -d -p 80:8080 -t ${ecrUrl}/${repository}:${currentBuild.number};'"
-                }
             }
         }
     }
