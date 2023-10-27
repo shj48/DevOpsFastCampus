@@ -39,11 +39,11 @@ pipeline {
                 }
             }
         }
-        stage('Deploy to AWS EC2 VM'){
+        stage('Deploy to Azure VM'){
             steps{
                 sshagent(credentials : ["deploy-key"]) {
-                    sh "ssh -o StrictHostKeyChecking=no ubuntu@${deployHost} \
-                     'aws ecr get-login-password --region ${region} | docker login --username AWS --password-stdin ${ecrUrl}/${repository}; \
+                    sh "ssh -o StrictHostKeyChecking=no shj@${deployHost} \
+                      az acr login -n ${ecrUrl} -u 42cef4ac-8f6a-45b9-b8c2-eb81dc2486cd  -p nKE8Q~CIunq9YJctun6TmMxLC-uGZpLA.MXIEbK-\
                       docker run -d -p 80:8080 -t ${ecrUrl}/${repository}:${currentBuild.number};'"
                 }
             }
