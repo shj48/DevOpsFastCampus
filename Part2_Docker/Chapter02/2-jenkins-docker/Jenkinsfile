@@ -38,9 +38,9 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: 'azure-service-principal', passwordVariable: 'AZURE_CLIENT_SECRET', usernameVariable: 'AZURE_CLIENT_ID')])
                     ecrLogin()
                     sh """
-                        az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET -t $AZURE_TENANT_ID
-                        az account set -s $AZURE_SUBSCRIPTION_ID
-                        az acr login --name $CONTAINER_REGISTRY --resource-group $RESOURCE_GROUP
+                        az login --service-principal -u ${AZURE_CLIENT_ID} -p ${AZURE_CLIENT_SECRET} -t ${AZURE_TENANT_ID}
+                        az account set -s ${AZURE_SUBSCRIPTION_ID}
+                        az acr login --name $CONTAINER_REGISTRY --resource-group ${RESOURCE_GROUP}
                         cd ${mainDir}
                         ./gradlew jib -Djib.to.image=${ecrUrl}/${repository}:${currentBuild.number} -Djib.console='plain'
                     """
