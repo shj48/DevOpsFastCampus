@@ -1,9 +1,21 @@
 def mainDir="Chapter02/2-jenkins-docker"
 def ecrLoginHelper="docker-credential-ecr-login"
-def region="<AWS Region>"
+def region="koreacentral"
 def ecrUrl="<AWS ECR URL>"
 def repository="<Image Repository Name>"
 def deployHost="10.2.0.4"
+
+def CONTAINER_REGISTRY='shjtest'
+def RESOURCE_GROUP='rg01-shj-study'
+def REPO="test"
+def IMAGE_NAME="test"
+def TAG="tag"
+
+def AZURE_SUBSCRIPTION_ID="8777399f-4ccc-4a5d-9ddb-059869424923"
+def test="                            sh 'az acr build --image $REPO/$IMAGE_NAME:$TAG --registry $CONTAINER_REGISTRY --file Dockerfile . '
+                        "
+
+def AZURE_TENANT_ID="a74b5451-a280-4768-a5cd-cb47af153c71"
 
 pipeline {
     agent any
@@ -20,6 +32,20 @@ pipeline {
                 cd ${mainDir}
                 ./gradlew clean build
                 """
+            }
+        }
+        stage('Build Docker Image by Jib & Push to ACR Repository') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'azure-service-principal', passwordVariable: 'AZURE_CLIENT_SECRET', usernameVariable: 'AZURE_CLIENT_ID')])
+                    ecrLogin()
+                    sh """
+                        az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET -t $AZURE_TENANT_ID
+                        az account set -s $AZURE_SUBSCRIPTION_ID
+                        az acr login --name $CONTAINER_REGISTRY --resource-group $RESOURCE_GROUP
+                        cd ${mainDir}
+                        ./gradlew jib -Djib.to.image=${ecrUrl}/${repository}:${currentBuild.number} -Djib.console='plain'
+                    """
+                }
             }
         }
         // stage('Build Docker Image by Jib & Push to AWS ECR Repository') {
