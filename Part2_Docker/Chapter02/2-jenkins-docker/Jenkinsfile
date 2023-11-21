@@ -12,8 +12,7 @@ def IMAGE_NAME="test"
 def TAG="tag"
 
 def AZURE_SUBSCRIPTION_ID="8777399f-4ccc-4a5d-9ddb-059869424923"
-def test="                            sh 'az acr build --image $REPO/$IMAGE_NAME:$TAG --registry $CONTAINER_REGISTRY --file Dockerfile . '
-                        "
+def test=" az acr build --image $REPO/$IMAGE_NAME:$TAG --registry $CONTAINER_REGISTRY --file Dockerfile ."
 
 def AZURE_TENANT_ID="a74b5451-a280-4768-a5cd-cb47af153c71"
 
