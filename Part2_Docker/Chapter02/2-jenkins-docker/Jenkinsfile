@@ -21,10 +21,11 @@ pipeline {
 
     environment {
         AZURE_SP = credentials('azure-service-principal')
-        CLIENT_ID = ${AZURE_SP_CLIENT_ID}
-        CLIENT_SECRET = ${AZURE_SP_CLIENT_SECRET}
-        TENANT_ID = ${AZURE_SP_TENANT_ID}
-        SUBS_ID = ${AZURE_SP_SUBS_ID}
+        CLIENT_ID = credentials('azure-service-principal')
+        //CLIENT_ID = ${AZURE_SP_CLIENT_ID}
+        CLIENT_SECRET = credentials('azure-service-principal')
+        TENANT_ID = credentials('azure-service-principal')
+        SUBS_ID = credentials('azure-service-principal')
     }
 
     stages {
