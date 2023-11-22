@@ -32,10 +32,10 @@ pipeline {
                 ./gradlew clean build
                 """
             }
-        }
+        }azure-service-principal
         stage('Build Docker Image by Jib & Push to ACR Repository') {
             steps {
-                withCredentials([azureServicePrincipal('azure-service-principal')])
+                withCredentials([azureServicePrincipal(credentialsId: 'azure-service-principal', subscriptionIdVariable: 'SUBS_ID', clientIdVariable: 'CLIENT_ID', clientSecretVariable: 'CLIENT_SECRET', tenantIdVariable: 'TENANT_ID')])
                     sh """
                         az login --service-principal  $CLIENT_ID -p $CLIENT_SECRET -t $TENANT_ID
                         az account set -s $SUBS_ID
