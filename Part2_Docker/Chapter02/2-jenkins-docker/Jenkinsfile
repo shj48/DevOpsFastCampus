@@ -52,7 +52,6 @@ pipeline {
                     sh """
                         az login --service-principal -u $AZURE_SP_CLIENT_ID -p $AZURE_SP_CLIENT_SECRET -t $AZURE_SP_TENANT_ID
                         az account set -s $AZURE_SP_SUBSCRIPTION_ID
-
                         az acr login -n ${CONTAINER_REGISTRY} --username $AZURE_SP_CLIENT_ID --password $AZURE_SP_CLIENT_SECRET
                         cd ${mainDir}
                         ./gradlew jib -Djib.to.image=${ecrUrl}/${repository}:${currentBuild.number} -Djib.console='plain'
