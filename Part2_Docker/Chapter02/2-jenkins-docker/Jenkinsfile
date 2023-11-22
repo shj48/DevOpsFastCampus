@@ -35,11 +35,11 @@ pipeline {
         }
         stage('Build Docker Image by Jib & Push to ACR Repository') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'azure-service-principal', passwordVariable: 'AZURE_CLIENT_SECRET', usernameVariable: 'AZURE_CLIENT_ID')])
+                withCredentials([azureServicePrincipal(credentialsId: 'azure-service-principal', subscriptionIdVariable: 'SUBS_ID', clientIdVariable: 'CLIENT_ID', clientSecretVariable: 'CLIENT_SECRET', tenantIdVariable: 'TENANT_ID')])
                     ecrLogin()
                     sh """
-                        az login --service-principal -u ${AZURE_CLIENT_ID} -p ${AZURE_CLIENT_SECRET} -t ${AZURE_TENANT_ID}
-                        az account set -s ${AZURE_SUBSCRIPTION_ID}
+                        az login --service-principal  $CLIENT_ID -p $CLIENT_SECRET -t $TENANT_ID
+                        az account set -s $SUBS_ID
                         az acr login --name ${CONTAINER_REGISTRY} --resource-group ${RESOURCE_GROUP}
                         cd ${mainDir}
                         ./gradlew jib -Djib.to.image=${ecrUrl}/${repository}:${currentBuild.number} -Djib.console='plain'
