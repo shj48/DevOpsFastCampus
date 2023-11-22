@@ -19,6 +19,14 @@ def AZURE_TENANT_ID="a74b5451-a280-4768-a5cd-cb47af153c71"
 pipeline {
     agent any
 
+    environment {
+        AZURE_SP = credentials('azure-service-principal')
+        CLIENT_ID = ${AZURE_SP_CLIENT_ID}
+        CLIENT_SECRET = ${AZURE_SP_CLIENT_SECRET}
+        TENANT_ID = ${AZURE_SP_TENANT_ID}
+        SUBS_ID = ${AZURE_SP_SUBS_ID}
+    }
+
     stages {
         stage('Pull Codes from Github'){
             steps{
