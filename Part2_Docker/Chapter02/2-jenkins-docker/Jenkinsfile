@@ -47,7 +47,7 @@ pipeline {
          // withCredentials([azureServicePrincipal(credentialsId: 'azure-service-principal', subscriptionIdVariable: 'SUBS_ID', clientIdVariable: 'CLIENT_ID', clientSecretVariable: 'CLIENT_SECRET', tenantIdVariable: 'TENANT_ID')])      
                     sh """
                         az login --service-principal  $AZURE_SP_CLIENT_ID -p $AZURE_SP_CLIENT_SECRET -t $AZURE_SP_TENANT_ID
-                        az account set -s $AZURE_SP_SUBS_ID
+                        az account set -s $AZURE_SP_SUBSCRIPTION_ID
                         az acr login --name ${CONTAINER_REGISTRY} --resource-group ${RESOURCE_GROUP}
                         cd ${mainDir}
                         ./gradlew jib -Djib.to.image=${ecrUrl}/${repository}:${currentBuild.number} -Djib.console='plain'
