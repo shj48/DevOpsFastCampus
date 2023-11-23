@@ -52,10 +52,9 @@ pipeline {
                         az acr login --name ${CONTAINER_REGISTRY} --resource-group ${RESOURCE_GROUP}
                         az acr login -n ${CONTAINER_REGISTRY}
                         cd ${mainDir}
-                        ./gradlew jib -Djib.to.image=${CONTAINER_REGISTRY}/${REPO}:${currentBuild.number} -Djib.console='plain'
+                        ./gradlew jib -Djib.to.image=${CONTAINER_REGISTRY}.azurecr.io/${REPO}:${currentBuild.number} -Djib.console='plain'
                     """
                 }
-        
         }
         
         // stage('Build Docker Image by Jib & Push to AWS ECR Repository') {
