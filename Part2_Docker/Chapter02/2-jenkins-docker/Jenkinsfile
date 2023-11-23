@@ -1,13 +1,10 @@
 def mainDir="Part2_Docker/Chapter02/2-jenkins-docker"
 def ecrLoginHelper="docker-credential-ecr-login"
 def region="koreacentral"
-def ecrUrl="<AWS ECR URL>"
-def repository="<Image Repository Name>"
 def deployHost="10.2.0.4"
-
 def CONTAINER_REGISTRY='shjtest'
 def RESOURCE_GROUP='rg01-shj-study'
-def REPO="test"
+def REPOSITORY="test"
 def IMAGE_NAME="test"
 def TAG="tag"
 
@@ -54,7 +51,7 @@ pipeline {
                         az account set -s $AZURE_SP_SUBSCRIPTION_ID
                         az acr login -n ${CONTAINER_REGISTRY}
                         cd ${mainDir}
-                        ./gradlew jib -Djib.to.image=${ecrUrl}/${repository}:${currentBuild.number} -Djib.console='plain'
+                        ./gradlew jib -Djib.to.image=${CONTAINER_REGISTRY}/${REPOSITORY}:${currentBuild.number} -Djib.console='plain'
                     """
                 }
         
