@@ -58,10 +58,9 @@ pipeline {
         stage('Deploy to Azure VM'){
             steps{
                 sshagent (credentials: ['deploy-key']) {
-                    sh """
-                    ssh -o StrictHostKeyChecking=no shj@${deployHost} \
-                      'az login --service-principal -u $AZURE_SP_CLIENT_ID -p $AZURE_SP_CLIENT_SECRET -t $AZURE_SP_TENANT_ID  | az account set -s $AZURE_SP_SUBSCRIPTION_ID | az acr login -n ${CONTAINER_REGISTRY};'
-                    """
+                    sh "ssh -o StrictHostKeyChecking=no shj@${deployHost} \
+                     'az login --service-principal -u $AZURE_SP_CLIENT_ID -p $AZURE_SP_CLIENT_SECRET -t $AZURE_SP_TENANT_ID  | az account set -s $AZURE_SP_SUBSCRIPTION_ID | az acr login -n ${CONTAINER_REGISTRY}; \
+                      docker run -d -p 80:8080 -t ${CONTAINER_REGISTRY}.azurecr.io/${REPO}:${currentBuild.number};'"
                 }
             }
         }
@@ -87,6 +86,11 @@ pipeline {
         //               docker run -d -p 80:8080 -t ${ecrUrl}/${repository}:${currentBuild.number};'"
         //         }
         //     }
+                    //         sh """
+                    // ssh -o StrictHostKeyChecking=no shj@${deployHost} \
+                    //   'az login --service-principal -u $AZURE_SP_CLIENT_ID -p $AZURE_SP_CLIENT_SECRET -t $AZURE_SP_TENANT_ID  | az account set -s $AZURE_SP_SUBSCRIPTION_ID | az acr login -n ${CONTAINER_REGISTRY}; \
+                    //   docker run -d -p 80:8080 -t ${CONTAINER_REGISTRY}.azurecr.io/${REPO}:${currentBuild.number};'
+                    // """
         // }
     }
 }
